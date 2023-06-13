@@ -12,6 +12,8 @@ import java.util.*;
 public class JwtTokenUtil {
 
     private static final String CLAIM_KEY_USER_NO = "userNo";
+    private static final String CLAIM_KEY_USERNAME = "username";
+    private static final String CLAIM_KEY_USER_TYPE = "userType";
     private static final String SECRET = "secret";
     private static final String ISSUER = "sdu-admin";
 
@@ -24,6 +26,29 @@ public class JwtTokenUtil {
             userNo = null;
         }
         return userNo;
+    }
+
+    public String getUsernameFromToken(String token) {
+        String username;
+        try {
+            final Claims claims = getClaimsFromToken(token);
+            username = claims.get(CLAIM_KEY_USERNAME, String.class);
+        } catch (Exception e) {
+            username = null;
+        }
+        return username;
+    }
+
+    public String getUserTypeFromToken(String token) {
+        // 返回结果可能是 系统用户、学生、教师
+        String userType = null;
+        try {
+            final Claims claims = getClaimsFromToken(token);
+            userType = claims.get(CLAIM_KEY_USER_TYPE, String.class);
+        } catch (Exception ignored) {
+
+        }
+        return userType;
     }
 
     public Date getCreatedDateFromToken(String token) {
